@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: chocolat
+  labels:
+    name: chocolat
+spec:
+  replicas: 1
+  selector:
+    name: chocolat
+  template:
+    metadata:
+      labels:
+        name: chocolat
+    spec:
+      containers:
+      - name: chocolat
+        image: angdev/chocolat:latest
+        command:
+          - bash
+          - -c
+          - chocolat -r
+        ports:
+          - name: chocolat
+            containerPort: 5000
+        env:
+          - name: CHOCOLAT_ENV
+            value: production
+          - name: CHOCOLAT_PORT
+            value: "5000"
+          - name: DATABASE_DRIVER
+            value: postgres
+          - name: DATABASE_URL
+            value: "postgresql://postgres:mysecretpassword@postgres?sslmode=disable"
+          - name: REPO_URL
+            value: mongo

@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: mongo
+  name: mongo-controller
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: mongo
+    spec:
+      containers:
+      - image: mongo:latest
+        name: mongo
+        ports:
+        - name: mongo
+          containerPort: 27017
+          hostPort: 27017
+      volumeMounts:
+      - mountPath: /data/db
+        name: mongo-volume
+      volumes:
+      - name: mongo-volume
+        awsElasticBlockStore:
+          volumeID: aws://<availability-zone>/<volume-id>
+          fsType: ext4
